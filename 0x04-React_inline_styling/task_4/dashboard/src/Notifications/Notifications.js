@@ -22,64 +22,75 @@ class Notifications extends React.Component {
   render() {
     return (
       <>
-        <div className={css(notificationStyles.menuItem)}>
-          Your notifications
-        </div>
-        {this.props.displayDrawer?
-            <div className={css(notificationStyles.notifications)}>
-              <button style={{
-                color: '#3a3a3a',
-                fontWeight: 'bold',
-                background: 'none',
-                border: 'none',
-                fontSize: '15px',
-                position: 'absolute',
-                right: '3px',
-                top: '3px',
-                cursor: 'pointer',
-                outline: 'none',
-              }}
-              aria-label="Close"
-              className={css(notificationStyles.button)}
-              onClick={(e) => {
-                console.log('Close button has been clicked');
-              }}
-              >
-                <img src={closeIcon} alt="close icon" width="15px" />
-              </button>
+        {!this.props.displayDrawer ?
+          <div className={css(notificationStyles.menuItem)}>
+            Your notifications
+          </div>
+        :
+          <div className={css(notificationStyles.notifications)}>
+            <button style={{
+              color: '#3a3a3a',
+              fontWeight: 'bold',
+              background: 'none',
+              border: 'none',
+              fontSize: '15px',
+              position: 'absolute',
+              right: '3px',
+              top: '3px',
+              cursor: 'pointer',
+              outline: 'none',
+            }}
+            aria-label="Close"
+            className={css(notificationStyles.button)}
+            onClick={(e) => {
+              console.log('Close button has been clicked');
+            }}
+            >
+              <img src={closeIcon} alt="close icon" width="15px" />
+            </button>
+            {
+              this.props.listNotifications.length != 0 ?
+                <p>Here is the list of notifications</p>
+              : null
+            }
+            <ul className={css(notificationStyles.ul)}>
               {
-                this.props.listNotifications.length != 0 ?
-                  <p>Here is the list of notifications</p>
+                this.props.listNotifications.length == 0 ?
+                  <NotificationItem type="default" value="No new notification for now" />
                 : null
               }
-              <ul className={css(notificationStyles.ul)}>
-                {
-                  this.props.listNotifications.length == 0 ?
-                    <NotificationItem type="default" value="No new notification for now" />
-                  : null
-                }
-                {
-                  this.props.listNotifications.map((val, idx)=> {
-                    return <NotificationItem
-                    type={val.type}
-                    value={val.value}
-                    html={val.html}
-                    key={val.id}
-                    markAsRead={this.markAsRead}
-                    id={val.id}
-                  />
-                  })
-                }
-              </ul>
-            </div>
-          :
-            null
+              {
+                this.props.listNotifications.map((val, idx)=> {
+                  return <NotificationItem
+                  type={val.type}
+                  value={val.value}
+                  html={val.html}
+                  key={val.id}
+                  markAsRead={this.markAsRead}
+                  id={val.id}
+                />
+                })
+              }
+            </ul>
+          </div>
         }
 
       </>
     );
   }
 }
+
+const opacityAnim = {
+  '0%': { opacity: 0.5 },
+  '100%': { opacity: 1}
+};
+
+const bounceAnim = {
+  '0%': { transform: 'translateY(0px)' },
+  '33%': { transform: 'translateY(-5px)'},
+  '66%': { transform: 'translateY(5px)'},
+  '100%': { transform: 'translateY(0px)'},
+};
 
 const notificationStyles = StyleSheet.create({
 	notifications: {
@@ -101,7 +112,16 @@ const notificationStyles = StyleSheet.create({
     }
 	},
   menuItem: {
-    textAlign: 'right'
+    position: 'relative',
+    zIndex: 100,
+    float: 'right',
+    backgroundColor: '#fff8f8',
+    ':hover': {
+      cursor: 'pointer',
+      animationName: [opacityAnim, bounceAnim],
+      animationDuration: '1s, 0.5s',
+      animationIterationCount: '3'
+    }
   },
   ul: {
     '@media (max-width: 900px)': {
