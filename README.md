@@ -18,3 +18,6 @@ At the end of this project, you are expected to be able to explain to anyone, wi
 - Allowed editors: vi, vim, emacs, Visual Studio Code
 - All of your files should end with a new line
 - A README.md file at the root of the folder of the project is mandatory
+
+We work entirely with react here. The React code cannot work  without the `node_modules` dependencies.
+To do that, you need to run the npm again after. `npm install`
